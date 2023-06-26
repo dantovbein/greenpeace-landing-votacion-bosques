@@ -1,0 +1,164 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.question {
+  margin-bottom: 1.5rem;
+}
+
+.question .column {
+  justify-content: center;
+  width: 100%;
+  flex-direction: row;
+}
+
+.question .column label {
+  position: relative;
+  height: 4rem;
+  width: 5rem;
+}
+
+.question .column label:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.questionText {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.answer {
+  visibility: hidden;
+}
+
+.answerBtn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--border-color);
+  border-radius: .75rem;
+  border-color: var(--border-color);
+  border-width: 2px;
+  border-style: solid;
+}
+
+.questionSelected {
+  background-color: var(--gp-green);
+  border-color: var(--gp-green);
+  color: white;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.column {
+  width: 100%;
+  display: flex;
+}
+
+.column:not(:first-child) {
+  margin-top: 1rem;
+}
+
+.column label {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+/* .column input, */
+.column select,
+.column input:not([type="checkbox"]) {
+  width: inherit;
+  padding: 0.75rem;
+  font-size: 1.15rem;
+  outline: none;
+  border: none;
+  border-bottom: solid 2px gray;
+  background: transparent;
+}
+
+.userSection {
+  margin-top: 1rem;
+}
+
+.nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.submitBtn {
+  background-color: var(--gp-green);
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  /* padding: 0.75rem 2rem; */
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border: none;
+  width: 100%;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.submitBtn.disable {
+  pointer-events: none;
+  background-color: rgb(221, 221, 221);
+}
+
+.checkbox {
+  margin: 0.75rem 0;
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkbox input {
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-left: 1rem;
+}
+
+@media (min-width: 992px) {
+  .row {
+    flex-direction: row;
+  }
+  
+  .column {
+    width: 50%;
+    align-items: flex-end;
+  }
+
+  .column:not(:first-child) {
+    margin-top: 0;
+  }
+
+  .submitBtn {
+    font-size: 1.25rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: auto;
+  }
+
+  .question .column {
+    margin-top: 1rem;
+  }
+
+  .questionText {
+    font-size: 1.75rem;
+  }
+}

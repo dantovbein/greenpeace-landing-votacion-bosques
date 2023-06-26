@@ -1,0 +1,48 @@
+.main {
+  width: 100vw;
+  text-align: center;
+}
+
+.topBar {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: var(--gp-green);
+}
+
+.picture {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-image: url('/gp-bosques-header.jpg');
+  background-position: center;
+  min-height: 15rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  color: var(--white);
+}
+
+.heading {
+  line-height: 120%;
+}
+
+.highlighted {
+  color: var(--gp-green);
+}
+
+.url {
+  color: var(--white);
+  font-size: 1rem;
+}
+
+@media (min-width: 992px) {
+  .picture {
+    min-height: 20rem;
+    font-size: 2rem;
+  }
+
+  .url {
+    color: var(--white);
+    font-size: 1.25rem;
+  }
+}

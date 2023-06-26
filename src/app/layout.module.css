@@ -1,0 +1,30 @@
+.logo {
+  width: 300px !important;
+  height: 300px !important;
+  margin: auto;
+  display: inherit;
+}
+
+.main {
+  padding: 1.5rem;
+  width: 100vw;
+  max-width: 1100px;
+  margin: auto;
+  color: var(--body-color);
+}
+
+.content p {
+  font-size: 1.25rem;
+  line-height: 175%;
+  margin-bottom: 1.1rem;
+}
+
+@media (min-width: 992px) {
+  .main {
+    padding: 2rem;
+  }
+
+  .content p {
+    font-size: 1.5rem;
+  }
+}
