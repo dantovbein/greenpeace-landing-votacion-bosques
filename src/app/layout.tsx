@@ -24,12 +24,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* <Script id='google-analytics'></Script> */}
-      {/* google:
-          analytics:
-            tracking_id: "UA-175817761-1"
-          tag_manager:
-            id: "GTM-TZB6GQ3" */}
       <body className={poppins.className}>
         <Header />
         <main className={styles.main}>
@@ -37,7 +31,7 @@ export default function RootLayout({
             {children}
           </Provider>
           <Image
-            src={`${process.env.BASE_PATH}/gp-bosques-logo.svg`}
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/gp-bosques-logo.svg`}
             alt="Votá por los bosques"
             className={styles.logo}
             width={300}

@@ -4,7 +4,7 @@ import { FC } from "react";
 import styles from '@/app/_components/ThankYou/styles.module.css';
 import { useFormContext } from "@/app/_contexts/form";
 import SocialShareNav from '@/app/_components/SocialShareNav'
-import Image from "next/image";
+// import Image from "next/image";
 
 interface IProps {
   children?: React.ReactNode;

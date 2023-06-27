@@ -1,5 +1,3 @@
-"use client"
-
 import React, { ChangeEvent, FC, MouseEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/app/_components/QuizForm/styles.module.css'
@@ -195,7 +193,7 @@ export const Component:FC<{}> = () => {
     <>
       <form className={styles.main} onSubmit={onSubmit}>
         <div className={styles.question}>
-          <h3 className={styles.questionText}>¿Estás a favor de que se establezcan senas de prisión para los responsables de desmontes ilegales e incendios forestales?</h3>
+          <h3 className={styles.questionText}>¿Estás a favor de que se establezcan penas de prisión para los responsables de desmontes ilegales e incendios forestales?</h3>
           <div className={styles.column}>
             <label>
               <input type='radio' value={1} checked={data.answer === 1 && false} className={styles.answer} onChange={onChangeQuestion} />

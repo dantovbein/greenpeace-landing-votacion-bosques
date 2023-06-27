@@ -1,4 +1,5 @@
 RewriteEngine on
+# Only for app in subdirectory
 RewriteBase /sk/votacion-bosques/
 RewriteRule ^index\.html$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f

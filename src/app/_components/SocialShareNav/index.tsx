@@ -19,15 +19,15 @@ const Component: FunctionComponent<{}> = () => {
       <h4 className={styles.title}>Compartí con tus amigos</h4>
       <nav className={styles.socialNav}>
         <WhatsappShareButton
-          title={`${process.env.NEXT_PUBLIC_WHATSAPP_TITLE_SHARE} hdfjhdjhdj`}
           url={`${process.env.NEXT_PUBLIC_URL_SHARE}`}
+          title={`${process.env.NEXT_PUBLIC_WHATSAPP_TITLE_SHARE}`}
           separator=" "
           windowHeight={SHARE_MODAL_HEIGHT}
           windowWidth={SHARE_MODAL_WIDTH}
           className={styles.icon}
         >
           <Image
-            src="/images/icons/whatsapp-icon.svg"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/icons/whatsapp-icon.svg`}
             alt="Whatsapp"
             width={64}
             height={64}
@@ -42,7 +42,7 @@ const Component: FunctionComponent<{}> = () => {
           className={styles.icon}
         >
           <Image
-            src="/images/icons/facebook-icon.svg"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/icons/facebook-icon.svg`}
             alt="Facebook"
             width={64}
             height={64}
@@ -57,7 +57,7 @@ const Component: FunctionComponent<{}> = () => {
           className={styles.icon}
         >
           <Image
-            src="/images/icons/twitter-icon.svg"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/icons/twitter-icon.svg`}
             alt="Twitter"
             className={styles.icon}
             width={64}
@@ -66,12 +66,15 @@ const Component: FunctionComponent<{}> = () => {
         </TwitterShareButton>
 
         <LinkedinShareButton
-          about={`${process.env.NEXT_PUBLIC_LINKEDIN_ABOUT_SHARE}`}
+          // about={`${process.env.NEXT_PUBLIC_LINKEDIN_ABOUT_SHARE}`}
+          title='=Título pata Linkedin'
+          summary='=Título pata Linkedin'
+          source='=Título pata Linkedin'
           url={`${process.env.NEXT_PUBLIC_URL_SHARE}`}
           className={styles.icon}
         >
           <Image
-            src="/images/icons/linkedin-icon.svg"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/icons/linkedin-icon.svg`}
             alt="Linkedin"
             width={64}
             height={64}
