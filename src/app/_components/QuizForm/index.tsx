@@ -1,7 +1,12 @@
-import React, { ChangeEvent, FC, MouseEvent, useCallback, useEffect, useMemo, useRef } from 'react';
+"use client"
+
+import React, { ChangeEvent, FC, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/app/_components/QuizForm/styles.module.css'
 import { useFormContext } from "@/app/_contexts/form";
+import { UserType } from '@/app/_reducers/form';
+
+declare const window: Window & { dataLayer: Record<string, unknown>[]; };
 
 export type OnChangeEvent = MouseEvent<HTMLButtonElement> | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>;
 
@@ -32,10 +37,18 @@ const provinces: Array<string> = [
   "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
 ];
 
+const headers = {
+  "Content-Type": "application/json",
+  "X-Greenlab-App": 'formulario-votacion-bosques'
+};
+
 export const Component:FC<{}> = () => {
   const { data, submitted, submitting, dispatch } = useFormContext();
   const userRef = useRef<HTMLDivElement>(null);
+  const agePermittedRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const [ checked, setChecked ] = useState<boolean>(false);
+
 
   const onChangeQuestion = useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +56,20 @@ export const Component:FC<{}> = () => {
         type: 'UPDATE_FIELD',
         payload: {
           ['answer']: parseInt(evt.currentTarget.value),
+        },
+      })
+    },
+    [ dispatch ]
+  )
+
+  const onClickQuestion = useCallback(
+    (evt: React.MouseEvent<HTMLButtonElement>) => {
+      evt.preventDefault()
+
+      dispatch({
+        type: 'UPDATE_FIELD',
+        payload: {
+          ['answer']: parseInt((evt.currentTarget as any).dataset.value),
         },
       })
     },
@@ -69,13 +96,10 @@ export const Component:FC<{}> = () => {
       dispatch({ type: 'SUBMIT' });
   
       const resHubsot = await fetch(
-        `https://app.greenpeace.org.ar/api/v1/hubspot/contact`,
+        `${process.env.NEXT_PUBLIC_GP_API}hubspot/contact`,
         {
           method: 'POST',
-          headers: {
-            "Content-Type": "application/json",
-            "X-Greenlab-App": 'formulario-votacion-bosques'
-          },
+          headers,
           body: JSON.stringify({
             email: data.email,
             firstname: data.fullName,
@@ -88,13 +112,10 @@ export const Component:FC<{}> = () => {
       );
   
       const resForma = await fetch(
-        `https://app.greenpeace.org.ar/api/v1/forma/form/${data.answer ? 69 : 70}/record`,
+        `${process.env.NEXT_PUBLIC_GP_API}forma/form/${data.answer ? process.env.NEXT_PUBLIC_FORM_ID_YES : process.env.NEXT_PUBLIC_FORM_ID_NO}/record`,
         {
           method: 'POST',
-          headers: {
-            "Content-Type": "application/json",
-            "X-Greenlab-App": 'formulario-votacion-bosques'
-          },
+          headers,
           body: JSON.stringify({
             citizenId: data.docNumber,
             email: data.email,
@@ -104,11 +125,16 @@ export const Component:FC<{}> = () => {
           }),
         }
       );
+
+      if(resHubsot.ok) {
+        window.dataLayer.push({
+          event: "formSubmission",
+        })
+      }
   
       if(resHubsot.ok && resForma.ok) {
         dispatch({ type: 'SUBMITTED' });
       } else {
-        console.log('Error')
         dispatch({
           type: 'FAILURE',
           error: 'Hubo un error inesperado. Volvé a intentar en unos segundos.'
@@ -120,26 +146,26 @@ export const Component:FC<{}> = () => {
       if(offlineUsers) {
         const users = (JSON.parse(offlineUsers) as Array<any>)
         users.push({
-          citizenId: data.docNumber,
+          docNumber: data.docNumber,
           email: data.email,
           fullName: data.fullName,
           phoneNumber: data.phoneNumber,
-          provincia: data.province,
+          province: data.province,
           answer: data.answer,
-        })
+        } as UserType)
         // Update offline users
         window.localStorage.setItem('users', JSON.stringify(users))
       } else {
         // Create offline users
         window.localStorage.setItem('users', JSON.stringify([
           {
-            citizenId: data.docNumber,
+            docNumber: data.docNumber,
             email: data.email,
             fullName: data.fullName,
             phoneNumber: data.phoneNumber,
-            provincia: data.province,
+            province: data.province,
             answer: data.answer,
-          }
+          } as UserType
         ]))
       }
     }
@@ -148,17 +174,35 @@ export const Component:FC<{}> = () => {
     dispatch,
   ]);
 
-  const onChangeCheckbox = useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => {
-      evt.preventDefault();
-      dispatch({
-        type: 'UPDATE_FIELD',
-        payload: {
-          [`${evt.currentTarget.name}`]: evt.currentTarget.checked,
-        },
-      })
-    },
-  [ dispatch ])
+  // const onChangeCheckbox = useCallback(
+  //   (evt: React.ChangeEvent<HTMLInputElement>) => {
+  //     evt.preventDefault();
+  //     console.log(data.agePermitted)
+  //     dispatch({
+  //       type: 'UPDATE_FIELD',
+  //       payload: {
+  //         [`${evt.currentTarget.name}`]: !data.agePermitted,
+  //       },
+  //     })
+  //     // setChecked(!checked)
+  //   },
+  // [
+  //   data,
+  //   checked,
+  //   dispatch,
+  // ])
+
+  const onChangeCheckbox = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    evt.preventDefault();
+    console.log(data.agePermitted)
+    dispatch({
+      type: 'UPDATE_FIELD',
+      payload: {
+        [`${evt.currentTarget.name}`]: !data.agePermitted,
+      },
+    })
+    // setChecked(!checked)
+  }
 
   const onSubmit = useCallback(
     async (evt: React.FormEvent) => {
@@ -167,6 +211,15 @@ export const Component:FC<{}> = () => {
     },
     [ postData ]
   );
+
+  useEffect(() => {
+    if(agePermittedRef.current) {
+      agePermittedRef.current.checked = data.agePermitted
+    }
+  }, [
+    data.agePermitted,
+    agePermittedRef,
+  ])
 
   useEffect(() => {
     if(submitted) {
@@ -195,14 +248,10 @@ export const Component:FC<{}> = () => {
         <div className={styles.question}>
           <h3 className={styles.questionText}>¿Estás a favor de que se establezcan penas de prisión para los responsables de desmontes ilegales e incendios forestales?</h3>
           <div className={styles.column}>
-            <label>
-              <input type='radio' value={1} checked={data.answer === 1 && false} className={styles.answer} onChange={onChangeQuestion} />
-              <div className={`${styles.answerBtn} ${data.answer === 1 ? styles.questionSelected : ''}`}>SI</div>
-            </label>
-            <label>
-              <input type='radio' value={0} checked={data.answer === 0 && false} className={styles.answer} onChange={onChangeQuestion} />
-              <div className={`${styles.answerBtn} ${data.answer === 0 ? styles.questionSelected : ''}`}>NO</div>
-            </label>
+            <nav className={styles.answerNav}>
+              <button onClick={onClickQuestion} className={`${styles.answerBtn} ${data.answer === 1 ? styles.answerSelected : ''}`} data-value={1}>SI</button>
+              <button onClick={onClickQuestion} className={`${styles.answerBtn} ${data.answer === 0 ? styles.answerSelected : ''}`} data-value={0}>NO</button>
+            </nav>
           </div>
         </div>
         <div ref={userRef} className={styles.userSection}>
@@ -260,29 +309,34 @@ export const Component:FC<{}> = () => {
               </label>
             </div>
           </div>
+          {`${checked}`}
           <div className={styles.row}>
-            <div className={styles.column}>
+            <div className={`${styles.column}`}>
               <label htmlFor='agePermitted' className={styles.checkbox}>
                 Soy mayor de 16 años {data.agePermitted ? 'true' : 'false'}
-                <input type="checkbox" name='agePermitted' onChange={onChangeCheckbox} checked={data.agePermitted} /> 
+                {/* <input ref={agePermittedRef} type="checkbox" name='agePermitted' onChange={onChangeCheckbox} checked={data.agePermitted} /> */}
+                <input ref={agePermittedRef} type="checkbox" name='agePermitted' onChange={onChangeCheckbox} />
+                {/* <input type="checkbox" name='agePermitted' onChange={onChangeCheckbox} checked={checked} /> */}
               </label>
             </div>
           </div>
         </div>
         <nav className={styles.nav}>
-          <button className={`${styles.submitBtn} ${(submitting || submitted)  ? styles.disable : ''}`} type='submit'>VOTAR</button>
+          <button className={`${styles.submitBtn} ${(submitting || submitted)  ? styles.disable : ''}`} type='submit'>{submitting ? 'ENVIANDO VOTO ...' :'VOTAR'}</button>
         </nav>
       </form>
-      { submitting && !submitted && <span>Enviando voto ..</span>}
     </>
   ), [
     data,
     submitting,
     submitted,
     userRef,
+    agePermittedRef,
+    checked,
     onChange,
     onChangeCheckbox,
     onChangeQuestion,
+    onClickQuestion,
     onSubmit,
   ]);
 }

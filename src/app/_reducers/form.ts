@@ -48,20 +48,25 @@ export type ContextStateType = {
   data: UserType;
 } & SharedState;
 
-export type ContextActionType = 
-// | { type: 'SET_CAMPAIGN_DATA', payload: any }
-| SharedActions;
+export type ContextActionType = SharedActions;
 
 export const initialState: ContextStateType = {
   data: {
-    fullName: 'Doe Deer',
-    docNumber: '37199112',
-    phoneNumber: '1174837483',
-    email: 'doe.deer@email.com',
-    province: 'Buenos Aires',
+    fullName: '',
+    docNumber: '',
+    phoneNumber: '',
+    email: '',
+    province: '',
     answer: -1,
     agePermitted: false,
-  },
+    ...((process.env.NEXT_PUBLIC_FILL_FORM === 'true') ? {
+      fullName: 'Doe Deer',
+      docNumber: '12345678',
+      phoneNumber: '44440000',
+      email: 'doe.deer@email.com',
+      province: 'Buenos Aires',
+    } : {}),
+  } as UserType,
   submitted: false,
   submitting: false,
 }
