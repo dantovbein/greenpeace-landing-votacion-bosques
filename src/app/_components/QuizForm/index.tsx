@@ -12,29 +12,29 @@ export type OnChangeEvent = MouseEvent<HTMLButtonElement> | ChangeEvent<HTMLInpu
 
 const provinces: Array<string> = [
   "Buenos Aires",
-  "Córdoba",
-  "Santa Fe",
-  "Ciudad Autónoma de Buenos Aires",
-  "Mendoza",
-  "Tucumán",
-  "Entre Ríos",
-  "Salta",
-  "Misiones",
-  "Chaco",
-  "Corrientes",
-  "Santiago del Estero",
-  "San Juan",
-  "Jujuy",
-  "Río Negro",
-  "Neuquén",
-  "Formosa",
-  "Chubut",
-  "San Luis",
   "Catamarca",
+  "Chaco",
+  "Chubut",
+  "Ciudad Autónoma de Buenos Aires",
+  "Córdoba",
+  "Corrientes",
+  "Entre Ríos",
+  "Formosa",
+  "Jujuy",
   "La Rioja",
   "La Pampa",
+  "Mendoza",
+  "Misiones",
+  "Neuquén",
+  "Río Negro",
+  "Salta",
+  "San Luis",
+  "San Juan",
   "Santa Cruz",
+  "Santa Fe",
+  "Santiago del Estero",
   "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+  "Tucumán",
 ];
 
 const headers = {
@@ -259,6 +259,7 @@ export const Component:FC<{}> = () => {
             </nav>
           </div>
         </div>
+        <h2 className={styles.subHeading}>Completá tus datos</h2>
         <div ref={userRef} className={styles.userSection}>
           <div className={styles.row}>
             <div className={styles.column}>
@@ -314,7 +315,6 @@ export const Component:FC<{}> = () => {
               </label>
             </div>
           </div>
-          {`${checked}`}
           <div className={styles.row}>
             <div className={`${styles.column}`}>
               <label htmlFor='agePermitted' className={styles.checkbox}>

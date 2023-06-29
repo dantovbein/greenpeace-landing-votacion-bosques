@@ -17,14 +17,6 @@ export const Component:FC<IProps> = ({ children }) => {
     <div className={styles.main}>
       <h2 className={styles.heading}>Gracias <span className={styles.highlighted}>{data.fullName}</span> por tu voto.</h2>
       { children }
-      {/* <Image
-        src="/trees.svg"
-        alt="Votá por los bosques"
-        className={styles.trees}
-        width={250}
-        height={250}
-        priority
-      /> */}
       <SocialShareNav />
     </div>
   )

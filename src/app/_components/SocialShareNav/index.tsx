@@ -3,7 +3,6 @@ import {
   FacebookShareButton,
   TwitterShareButton,
   WhatsappShareButton,
-  // EmailShareButton,
   LinkedinShareButton,
   
 } from 'react-share';
@@ -16,7 +15,7 @@ const SHARE_MODAL_WIDTH = 600;
 const Component: FunctionComponent<{}> = () => {
   return (
     <div>
-      <h4 className={styles.title}>Compartí con tus amigos</h4>
+      <h4 className={styles.title}>Compartí con tus amigos para que voten por los bosques</h4>
       <nav className={styles.socialNav}>
         <WhatsappShareButton
           url={`${process.env.NEXT_PUBLIC_URL_SHARE}`}
@@ -64,12 +63,11 @@ const Component: FunctionComponent<{}> = () => {
             height={64}
           />
         </TwitterShareButton>
-
+        
         <LinkedinShareButton
-          // about={`${process.env.NEXT_PUBLIC_LINKEDIN_ABOUT_SHARE}`}
-          title='=Título pata Linkedin'
-          summary='=Título pata Linkedin'
-          source='=Título pata Linkedin'
+          title={`${process.env.NEXT_PUBLIC_LINKEDIN_TITLE}`}
+          summary={`${process.env.NEXT_PUBLIC_LINKEDIN_SUMMARY}`}
+          source={`${process.env.NEXT_PUBLIC_LINKEDIN_SOURCE}`}
           url={`${process.env.NEXT_PUBLIC_URL_SHARE}`}
           className={styles.icon}
         >
@@ -84,16 +82,6 @@ const Component: FunctionComponent<{}> = () => {
     </div>
   )
 };
-
-          
-          
-          {/* <Image
-            src="/images/icons/email-icon.png"
-            alt="Email"
-            className={styles.icon}
-            width={64}
-            height={64}
-          /> */}
 
 Component.displayName = 'SocialShareElements.Nav';
 export default Component;

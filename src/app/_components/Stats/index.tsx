@@ -22,8 +22,6 @@ const Component: FC<{}> = () => {
   useEffect(() => {
     if(yesVotes && noVotes) {
       setTotalVotes(yesVotes + noVotes);
-      // setFetching(false)
-      // setFetched(true)
     }
   }, [
     yesVotes,
