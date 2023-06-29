@@ -3,6 +3,7 @@ export interface GenericReducerFn<S, A> {
 }
 
 export type UserType = {
+  id?: number,
   fullName: string;
   agePermitted: boolean;
   answer: -1 | 0 | 1;

@@ -27,7 +27,7 @@ export default function Users() {
           <span>Voto</span>
         </li>
         {users.map((user: UserType, key: number) => (
-          <li key={key} className={styles.item}>
+          <li key={user.id} className={styles.item}>
             <span>{user.fullName}</span>
             <span>{user.email}</span>
             <span>{user.docNumber}</span>

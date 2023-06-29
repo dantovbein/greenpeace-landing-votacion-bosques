@@ -107,6 +107,7 @@ export const Component:FC<{}> = () => {
             phone: data.phoneNumber,
             city: data.province,
             dni: data.docNumber,
+            votacion_campana_bosques: data.answer,
           }),
         }
       );
@@ -122,6 +123,8 @@ export const Component:FC<{}> = () => {
             fullName: data.fullName,
             phoneNumber: data.phoneNumber,
             provincia: data.province,
+            // answer: data.answer,
+            // userAgent: '',
           }),
         }
       );
@@ -146,6 +149,7 @@ export const Component:FC<{}> = () => {
       if(offlineUsers) {
         const users = (JSON.parse(offlineUsers) as Array<any>)
         users.push({
+          id: new Date().getTime(),
           docNumber: data.docNumber,
           email: data.email,
           fullName: data.fullName,
@@ -159,6 +163,7 @@ export const Component:FC<{}> = () => {
         // Create offline users
         window.localStorage.setItem('users', JSON.stringify([
           {
+            id: new Date().getTime(),
             docNumber: data.docNumber,
             email: data.email,
             fullName: data.fullName,
