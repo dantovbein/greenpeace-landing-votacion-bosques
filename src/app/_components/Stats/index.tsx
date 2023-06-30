@@ -12,7 +12,7 @@ const Component: FC<{}> = () => {
 
   const fetchVotes = async () => {
     setFetching(true)
-    const forms = await (await fetch('https://app.greenpeace.org.ar/api/v1/forma/form')).json();
+    const forms = await (await fetch(`${process.env.NEXT_PUBLIC_GP_API}forma/form`)).json();
     setFetching(false)
     setFetched(true)
     setYesVotes(forms.filter((form: any) => form.formId === 69)[0].total); // 47

@@ -107,7 +107,7 @@ export const Component:FC<{}> = () => {
             phone: data.phoneNumber,
             city: data.province,
             dni: data.docNumber,
-            votacion_campana_bosques: data.answer,
+            Votacion_campana_bosques: data.answer === -1 ? '' : ((data.answer === 1) ? 'SI' : 'NO'),
           }),
         }
       );
