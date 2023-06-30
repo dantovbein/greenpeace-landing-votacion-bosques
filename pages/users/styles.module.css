@@ -22,6 +22,6 @@
 }
 
 .item span {
-  width: calc(100% / 6);
+  width: calc(100% / 7);
   margin-right: 0.5rem;
 }

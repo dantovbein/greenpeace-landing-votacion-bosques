@@ -1,10 +1,10 @@
 "use client"
 
-import React, { ChangeEvent, FC, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ChangeEvent, FC, MouseEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/app/_components/QuizForm/styles.module.css'
-import { useFormContext } from "@/app/_contexts/form";
-import { UserType } from '@/app/_reducers/form';
+import { useAppContext } from "@/app/_contexts/app";
+import { UserType } from '@/app/_reducers/app';
 
 declare const window: Window & { dataLayer: Record<string, unknown>[]; };
 
@@ -43,12 +43,9 @@ const headers = {
 };
 
 export const Component:FC<{}> = () => {
-  const { data, submitted, submitting, dispatch } = useFormContext();
+  const { user, submitted, submitting, dispatch } = useAppContext();
   const userRef = useRef<HTMLDivElement>(null);
-  const agePermittedRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const [ checked, setChecked ] = useState<boolean>(false);
-
 
   const onChangeQuestion = useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,41 +87,42 @@ export const Component:FC<{}> = () => {
   )
   
   const postData = useCallback(async () => {
-    console.log(window.navigator.onLine)
-
     if(window.navigator.onLine) {
       dispatch({ type: 'SUBMIT' });
   
+      const answer = (user.answer === 1) ? 'SI' : 'NO'
+
       const resHubsot = await fetch(
         `${process.env.NEXT_PUBLIC_GP_API}hubspot/contact`,
         {
           method: 'POST',
           headers,
           body: JSON.stringify({
-            email: data.email,
-            firstname: data.fullName,
-            lastname: data.fullName,
-            phone: data.phoneNumber,
-            city: data.province,
-            dni: data.docNumber,
-            Votacion_campana_bosques: data.answer === -1 ? '' : ((data.answer === 1) ? 'SI' : 'NO'),
+            email: user.email,
+            firstname: user.firstName,
+            lastname: user.lastName,
+            phone: user.phoneNumber,
+            city: user.province,
+            DNI: user.docNumber,
+            Votacion_campana_bosques: user.answer === -1 ? '' : answer,
           }),
         }
       );
   
       const resForma = await fetch(
-        `${process.env.NEXT_PUBLIC_GP_API}forma/form/${data.answer ? process.env.NEXT_PUBLIC_FORM_ID_YES : process.env.NEXT_PUBLIC_FORM_ID_NO}/record`,
+        `${process.env.NEXT_PUBLIC_GP_API}forma/form/${user.answer ? process.env.NEXT_PUBLIC_FORM_ID_YES : process.env.NEXT_PUBLIC_FORM_ID_NO}/record`,
         {
           method: 'POST',
           headers,
           body: JSON.stringify({
-            citizenId: data.docNumber,
-            email: data.email,
-            fullName: data.fullName,
-            phoneNumber: data.phoneNumber,
-            provincia: data.province,
-            // answer: data.answer,
-            // userAgent: '',
+            citizenId: user.docNumber,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phoneNumber: user.phoneNumber,
+            provincia: user.province,
+            campaignAnswer: answer,
+            userAgent: window.navigator.userAgent.replace(/;/g, '').replace(/,/g, '')
           }),
         }
       );
@@ -150,12 +148,13 @@ export const Component:FC<{}> = () => {
         const users = (JSON.parse(offlineUsers) as Array<any>)
         users.push({
           id: new Date().getTime(),
-          docNumber: data.docNumber,
-          email: data.email,
-          fullName: data.fullName,
-          phoneNumber: data.phoneNumber,
-          province: data.province,
-          answer: data.answer,
+          docNumber: user.docNumber,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phoneNumber: user.phoneNumber,
+          province: user.province,
+          answer: user.answer,
         } as UserType)
         // Update offline users
         window.localStorage.setItem('users', JSON.stringify(users))
@@ -164,50 +163,44 @@ export const Component:FC<{}> = () => {
         window.localStorage.setItem('users', JSON.stringify([
           {
             id: new Date().getTime(),
-            docNumber: data.docNumber,
-            email: data.email,
-            fullName: data.fullName,
-            phoneNumber: data.phoneNumber,
-            province: data.province,
-            answer: data.answer,
+            docNumber: user.docNumber,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phoneNumber: user.phoneNumber,
+            province: user.province,
+            answer: user.answer,
           } as UserType
         ]))
       }
     }
   }, [
-    data,
+    user,
     dispatch,
   ]);
 
-  // const onChangeCheckbox = useCallback(
-  //   (evt: React.ChangeEvent<HTMLInputElement>) => {
-  //     evt.preventDefault();
-  //     console.log(data.agePermitted)
-  //     dispatch({
-  //       type: 'UPDATE_FIELD',
-  //       payload: {
-  //         [`${evt.currentTarget.name}`]: !data.agePermitted,
-  //       },
-  //     })
-  //     // setChecked(!checked)
-  //   },
-  // [
-  //   data,
-  //   checked,
-  //   dispatch,
-  // ])
+  const onChangeCheckbox = useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>) => {
+      // evt.preventDefault();
+console.log('Entra')
+      // if(agePermittedRef.current) {
+      //   const checked = !user.agePermitted
+        
+      //   agePermittedRef.current.checked = checked
 
-  const onChangeCheckbox = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    evt.preventDefault();
-    console.log(data.agePermitted)
-    dispatch({
-      type: 'UPDATE_FIELD',
-      payload: {
-        [`${evt.currentTarget.name}`]: !data.agePermitted,
-      },
-    })
-    // setChecked(!checked)
-  }
+        dispatch({
+          type: 'UPDATE_FIELD',
+          payload: {
+            [`${evt.currentTarget.name}`]: !user.agePermitted,
+          },
+        })
+      // }
+      // setChecked(!checked)
+    },
+  [
+    user,
+    dispatch,
+  ])
 
   const onSubmit = useCallback(
     async (evt: React.FormEvent) => {
@@ -216,15 +209,6 @@ export const Component:FC<{}> = () => {
     },
     [ postData ]
   );
-
-  useEffect(() => {
-    if(agePermittedRef.current) {
-      agePermittedRef.current.checked = data.agePermitted
-    }
-  }, [
-    data.agePermitted,
-    agePermittedRef,
-  ])
 
   useEffect(() => {
     if(submitted) {
@@ -236,7 +220,7 @@ export const Component:FC<{}> = () => {
   ])
 
   useEffect(() => {
-    if(data.answer !== -1 && userRef.current) {
+    if(user.answer !== -1 && userRef.current) {
       const elementRect = userRef.current.getBoundingClientRect();
       
       window.scrollTo({
@@ -245,7 +229,7 @@ export const Component:FC<{}> = () => {
         behavior: "smooth",
       });
     }
-  }, [ data.answer ])
+  }, [ user.answer ])
 
   return useMemo(() => (
     <>
@@ -254,8 +238,8 @@ export const Component:FC<{}> = () => {
           <h3 className={styles.questionText}>¿Estás a favor de que se establezcan penas de prisión para los responsables de desmontes ilegales e incendios forestales?</h3>
           <div className={styles.column}>
             <nav className={styles.answerNav}>
-              <button onClick={onClickQuestion} className={`${styles.answerBtn} ${data.answer === 1 ? styles.answerSelected : ''}`} data-value={1}>SI</button>
-              <button onClick={onClickQuestion} className={`${styles.answerBtn} ${data.answer === 0 ? styles.answerSelected : ''}`} data-value={0}>NO</button>
+              <button onClick={onClickQuestion} className={`${styles.answerBtn} ${user.answer === 1 ? styles.answerSelected : ''}`} data-value={1}>SI</button>
+              <button onClick={onClickQuestion} className={`${styles.answerBtn} ${user.answer === 0 ? styles.answerSelected : ''}`} data-value={0}>NO</button>
             </nav>
           </div>
         </div>
@@ -263,17 +247,31 @@ export const Component:FC<{}> = () => {
         <div ref={userRef} className={styles.userSection}>
           <div className={styles.row}>
             <div className={styles.column}>
-              <label htmlFor='fullName'>
+              <label htmlFor='firstName'>
                 <input
-                  name='fullName'
-                  placeholder='Nombre y apellido'
-                  value={data.fullName}
+                  name='firstName'
+                  placeholder='Nombre'
+                  value={user.firstName}
                   required={true}
                   minLength={2}
                   onChange={onChange}
                 />
               </label>
             </div>
+            <div className={styles.column}>
+              <label htmlFor='lastName'>
+                <input
+                  name='lastName'
+                  placeholder='Apellido'
+                  value={user.lastName}
+                  required={true}
+                  minLength={2}
+                  onChange={onChange}
+                />
+              </label>
+            </div>
+          </div>
+          <div className={styles.row}>
             <div className={styles.column}>
               <label htmlFor='docNumber'>
                 <input
@@ -283,30 +281,28 @@ export const Component:FC<{}> = () => {
                   minLength={7}
                   maxLength={8}
                   required={true}
-                  value={data.docNumber}
+                  value={user.docNumber}
                   onChange={onChange}
                 />
               </label>
             </div>
-          </div>
-          <div className={styles.row}>
             <div className={styles.column}>
               <label htmlFor='phoneNumber'>
-                <input onChange={onChange} type='phoneNumber' name='phoneNumber' placeholder='Número de teléfono' value={data.phoneNumber} />
-              </label>
-            </div>
-            <div className={styles.column}>
-              <label htmlFor='email'>
-                <input onChange={onChange} type='email' name='email' placeholder='Correo electrónico' value={data.email} />
+                <input onChange={onChange} type='phoneNumber' name='phoneNumber' placeholder='Número de teléfono' value={user.phoneNumber} />
               </label>
             </div>
           </div>
           <div className={styles.row}>
+            <div className={styles.column}>
+              <label htmlFor='email'>
+                <input onChange={onChange} type='email' name='email' placeholder='Correo electrónico' value={user.email} />
+              </label>
+            </div>
             <div className={styles.column}>
               <label htmlFor='province'>Provincia
                 <select
                   name='province'
-                  value={data.province}
+                  value={user.province}
                   onChange={onChange}
                 >
                   <option value="" />
@@ -318,26 +314,28 @@ export const Component:FC<{}> = () => {
           <div className={styles.row}>
             <div className={`${styles.column}`}>
               <label htmlFor='agePermitted' className={styles.checkbox}>
-                Soy mayor de 16 años {data.agePermitted ? 'true' : 'false'}
-                {/* <input ref={agePermittedRef} type="checkbox" name='agePermitted' onChange={onChangeCheckbox} checked={data.agePermitted} /> */}
-                <input ref={agePermittedRef} type="checkbox" name='agePermitted' onChange={onChangeCheckbox} />
-                {/* <input type="checkbox" name='agePermitted' onChange={onChangeCheckbox} checked={checked} /> */}
+                <span><strong>Soy mayor de 16 años</strong></span>
+                <input type="checkbox" name='agePermitted' onChange={onChangeCheckbox} />
               </label>
             </div>
           </div>
         </div>
         <nav className={styles.nav}>
-          <button className={`${styles.submitBtn} ${(submitting || submitted)  ? styles.disable : ''}`} type='submit'>{submitting ? 'ENVIANDO VOTO ...' :'VOTAR'}</button>
+          <button
+            className={styles.submitBtn}
+            type='submit'
+            disabled={(submitting || submitted || !user.agePermitted || user.answer === -1)}
+          >
+            {submitting ? 'ENVIANDO VOTO ...' :'VOTAR'}
+          </button>
         </nav>
       </form>
     </>
   ), [
-    data,
+    user,
     submitting,
     submitted,
     userRef,
-    agePermittedRef,
-    checked,
     onChange,
     onChangeCheckbox,
     onChangeQuestion,
@@ -346,12 +344,5 @@ export const Component:FC<{}> = () => {
   ]);
 }
 
-// export default function QuizForm() {
-//   return (
-//     <Provider>
-//       <QuizForm />
-//     </Provider>
-//   )
-// }
 Component.displayName = 'QuizForm'
 export default Component

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import styles from './styles.module.css'
-import { UserType } from "@/app/_reducers/form";
+import { UserType } from "@/app/_reducers/app";
 
 export default function Users() {
   const [ users, setUsers ] = useState<Array<any>>([])
@@ -28,7 +28,8 @@ export default function Users() {
         </li>
         {users.map((user: UserType, key: number) => (
           <li key={user.id} className={styles.item}>
-            <span>{user.fullName}</span>
+            <span>{user.firstName}</span>
+            <span>{user.lastName}</span>
             <span>{user.email}</span>
             <span>{user.docNumber}</span>
             <span>{user.phoneNumber}</span>
