@@ -39,6 +39,7 @@ export type SharedState = {
   submitting: boolean,
   fetched: boolean,
   fetching: boolean,
+  error: string | null,
 };
 
 export type SharedActions = 
@@ -46,7 +47,7 @@ export type SharedActions =
   | { type: 'SUBMITTED' }
   | { type: 'FETCH' }
   | { type: 'FETCHED' }
-  // | { type: 'CANCEL' }
+  | { type: 'ERROR', payload: { error: string | null; } }
   | { type: 'FAILURE', error: any }
   | { type: 'UPDATE_FIELD', payload: any }
   | { type: 'UPDATE_QUIZ', payload: QuizType }
@@ -91,6 +92,7 @@ export const initialState: ContextStateType = {
   submitting: false,
   fetching: false,
   fetched: false,
+  error: null,
 }
 
 export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (state: ContextStateType, action: ContextActionType) => {
@@ -148,6 +150,12 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
         submitting: true,
         submitted: false,
         error: action.error,
+      }
+    }
+    case 'ERROR': {
+      return {
+        ...state,
+        error: action.payload.error || null,
       }
     }
     default: {

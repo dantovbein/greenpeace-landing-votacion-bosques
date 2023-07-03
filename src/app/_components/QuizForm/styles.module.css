@@ -196,6 +196,15 @@
   }
 }
 
+.error {
+  margin: 1rem 0;
+  background-color: rgb(255, 213, 213);
+  text-align: center;
+  padding: .5rem;
+  font-size: 0.9rem;
+  color: rgb(177, 0, 0);
+}
+
 @media (min-width: 768px) {
   .answerNav {
     width: 300px;

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import styles from '@/app/_components/QuizForm/styles.module.css'
 import { useAppContext } from "@/app/_contexts/app";
 import { UserType } from '@/app/_reducers/app';
+import { validateCitizenId, validateEmail, validateEmptyField, validateFirstName, validateLastName, validatePhoneNumber } from '@/utils/validator';
 
 declare const window: Window & { dataLayer: Record<string, unknown>[]; };
 
@@ -43,7 +44,7 @@ const headers = {
 };
 
 export const Component:FC<{}> = () => {
-  const { user, submitted, submitting, dispatch } = useAppContext();
+  const { user, submitted, submitting, error, dispatch } = useAppContext();
   const userRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -85,83 +86,104 @@ export const Component:FC<{}> = () => {
     },
     [ dispatch ]
   )
+
+  const validate = useCallback(() => {
+    let isValid = true;
+    const checks = [
+      validateFirstName(user.firstName),
+      validateLastName(user.lastName),
+      validateCitizenId(user.docNumber),
+      validatePhoneNumber(user.phoneNumber),
+      validateEmail(user.email),
+      validateEmptyField(user.province),
+    ]
+
+    checks.forEach((check:any) => {
+      if(isValid && !check.isValid) {
+        isValid = false
+        dispatch({
+          type: 'ERROR',
+          payload: { error: check.errorMessage || null },
+        })
+        return
+      }
+    })
+
+    if(isValid) {
+      dispatch({
+        type: 'ERROR',
+        payload: { error: null },
+      })
+    }
+
+    return isValid
+  }, [
+    user,
+    dispatch,
+  ])
   
   const postData = useCallback(async () => {
-    if(window.navigator.onLine) {
-      dispatch({ type: 'SUBMIT' });
+    if(validate()) {
+      if(window.navigator.onLine) {
+        dispatch({ type: 'SUBMIT' });
+    
+        const answer = (user.answer === 1) ? 'SI' : 'NO'
   
-      const answer = (user.answer === 1) ? 'SI' : 'NO'
-
-      const resHubsot = await fetch(
-        `${process.env.NEXT_PUBLIC_GP_API}hubspot/contact`,
-        {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            email: user.email,
-            firstname: user.firstName,
-            lastname: user.lastName,
-            phone: user.phoneNumber,
-            city: user.province,
-            DNI: user.docNumber,
-            Votacion_campana_bosques: user.answer === -1 ? '' : answer,
-          }),
-        }
-      );
-  
-      const resForma = await fetch(
-        `${process.env.NEXT_PUBLIC_GP_API}forma/form/${user.answer ? process.env.NEXT_PUBLIC_FORM_ID_YES : process.env.NEXT_PUBLIC_FORM_ID_NO}/record`,
-        {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            citizenId: user.docNumber,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            phoneNumber: user.phoneNumber,
-            provincia: user.province,
-            campaignAnswer: answer,
-            userAgent: window.navigator.userAgent.replace(/;/g, '').replace(/,/g, '')
-          }),
-        }
-      );
-
-      if(resHubsot.ok) {
-        window.dataLayer.push({
-          event: "formSubmission",
-        })
-      }
-  
-      if(resHubsot.ok && resForma.ok) {
-        dispatch({ type: 'SUBMITTED' });
-      } else {
-        dispatch({
-          type: 'FAILURE',
-          error: 'Hubo un error inesperado. Volvé a intentar en unos segundos.'
-        })
-      }
-    } else {
-      // Only when the connection is down
-      const offlineUsers = window.localStorage.getItem('users')
-      if(offlineUsers) {
-        const users = (JSON.parse(offlineUsers) as Array<any>)
-        users.push({
-          id: new Date().getTime(),
-          docNumber: user.docNumber,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          phoneNumber: user.phoneNumber,
-          province: user.province,
-          answer: user.answer,
-        } as UserType)
-        // Update offline users
-        window.localStorage.setItem('users', JSON.stringify(users))
-      } else {
-        // Create offline users
-        window.localStorage.setItem('users', JSON.stringify([
+        const resHubsot = await fetch(
+          `${process.env.NEXT_PUBLIC_GP_API}hubspot/contact`,
           {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+              email: user.email,
+              firstname: user.firstName,
+              lastname: user.lastName,
+              phone: user.phoneNumber,
+              lugar_de_residencia: user.province,
+              dni__c: user.docNumber,
+              Votacion_campana_bosques: user.answer === -1 ? '' : answer,
+            }),
+          }
+        );
+    
+        const resForma = await fetch(
+          `${process.env.NEXT_PUBLIC_GP_API}forma/form/${user.answer ? process.env.NEXT_PUBLIC_FORM_ID_YES : process.env.NEXT_PUBLIC_FORM_ID_NO}/record`,
+          {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+              citizenId: user.docNumber,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              phoneNumber: user.phoneNumber,
+              provincia: user.province,
+              campaignAnswer: answer,
+              userAgent: window.navigator.userAgent.replace(/;/g, '').replace(/,/g, '')
+            }),
+          }
+        );
+  
+        if(resHubsot.ok) {
+          window.dataLayer.push({
+            event: "formSubmission",
+          })
+        }
+    
+        if(resHubsot.ok && resForma.ok) {
+          dispatch({ type: 'SUBMITTED' });
+        } else {
+          dispatch({
+            type: 'FAILURE',
+            error: 'Hubo un error inesperado. Volvé a intentar en unos segundos.'
+          })
+        }
+      } else {
+        // Only when the connection is down
+        const offlineUsers = window.localStorage.getItem('users')
+        if(offlineUsers) {
+          const users = (JSON.parse(offlineUsers) as Array<any>)
+          users.push({
             id: new Date().getTime(),
             docNumber: user.docNumber,
             email: user.email,
@@ -170,9 +192,27 @@ export const Component:FC<{}> = () => {
             phoneNumber: user.phoneNumber,
             province: user.province,
             answer: user.answer,
-          } as UserType
-        ]))
+          } as UserType)
+          // Update offline users
+          window.localStorage.setItem('users', JSON.stringify(users))
+        } else {
+          // Create offline users
+          window.localStorage.setItem('users', JSON.stringify([
+            {
+              id: new Date().getTime(),
+              docNumber: user.docNumber,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              phoneNumber: user.phoneNumber,
+              province: user.province,
+              answer: user.answer,
+            } as UserType
+          ]))
+        }
       }
+    } else {
+      console.log('Formulario inválido')
     }
   }, [
     user,
@@ -181,21 +221,12 @@ export const Component:FC<{}> = () => {
 
   const onChangeCheckbox = useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
-      // evt.preventDefault();
-console.log('Entra')
-      // if(agePermittedRef.current) {
-      //   const checked = !user.agePermitted
-        
-      //   agePermittedRef.current.checked = checked
-
-        dispatch({
-          type: 'UPDATE_FIELD',
-          payload: {
-            [`${evt.currentTarget.name}`]: !user.agePermitted,
-          },
-        })
-      // }
-      // setChecked(!checked)
+      dispatch({
+        type: 'UPDATE_FIELD',
+        payload: {
+          [`${evt.currentTarget.name}`]: !user.agePermitted,
+        },
+      })
     },
   [
     user,
@@ -252,7 +283,6 @@ console.log('Entra')
                   name='firstName'
                   placeholder='Nombre'
                   value={user.firstName}
-                  required={true}
                   minLength={2}
                   onChange={onChange}
                 />
@@ -264,7 +294,6 @@ console.log('Entra')
                   name='lastName'
                   placeholder='Apellido'
                   value={user.lastName}
-                  required={true}
                   minLength={2}
                   onChange={onChange}
                 />
@@ -280,7 +309,6 @@ console.log('Entra')
                   placeholder='Documento de Identidad'
                   minLength={7}
                   maxLength={8}
-                  required={true}
                   value={user.docNumber}
                   onChange={onChange}
                 />
@@ -329,13 +357,16 @@ console.log('Entra')
             {submitting ? 'ENVIANDO VOTO ...' :'VOTAR'}
           </button>
         </nav>
+        {(error) && <span className={styles.error}>{error}</span>}
       </form>
     </>
   ), [
     user,
     submitting,
     submitted,
+    error,
     userRef,
+    validate,
     onChange,
     onChangeCheckbox,
     onChangeQuestion,

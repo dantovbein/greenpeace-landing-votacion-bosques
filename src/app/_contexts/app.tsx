@@ -12,6 +12,7 @@ interface IContextProps {
   submitting: boolean;
   fetched: boolean;
   fetching: boolean;
+  error: string | null;
   user: UserType;
   quiz: QuizType;
   fetchVotes: () => void;
@@ -22,7 +23,7 @@ const Context = createContext<IContextProps>({} as IContextProps);
 Context.displayName = 'FormContext';
 
 export const Provider: React.FunctionComponent<IProps> = ({ children }) => {
-  const [{ user, quiz, submitted, submitting, fetched, fetching }, dispatch] = useReducer(reducer, initialState);
+  const [{ user, quiz, submitted, submitting, fetched, fetching, error }, dispatch] = useReducer(reducer, initialState);
 
   const fetchVotes = useCallback(async () => {
     dispatch({ type: 'FETCH' })
@@ -48,6 +49,7 @@ export const Provider: React.FunctionComponent<IProps> = ({ children }) => {
       submitting,
       fetched,
       fetching,
+      error,
       fetchVotes,
       dispatch,
     }}>
@@ -61,6 +63,7 @@ export const Provider: React.FunctionComponent<IProps> = ({ children }) => {
     fetching,
     submitted,
     submitting,
+    error,
     fetchVotes,
     dispatch,
   ]);
