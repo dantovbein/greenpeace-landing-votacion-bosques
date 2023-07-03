@@ -1,6 +1,6 @@
 .PHONY: build
 build:
-	docker-compose -f docker-compose.yml up --build --remove-orphans
+	docker-compose -f docker-compose.yml up -d --build --remove-orphans
 
 .PHONY: down
 down:
