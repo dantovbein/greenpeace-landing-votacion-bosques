@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  coupon:
+    image: spa/votacion-bosques
+    container_name: votacion-bosques
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:80'
+    environment:
+      - PORT=3000
