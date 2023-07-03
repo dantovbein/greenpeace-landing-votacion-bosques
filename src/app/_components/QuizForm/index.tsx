@@ -12,6 +12,7 @@ declare const window: Window & { dataLayer: Record<string, unknown>[]; };
 export type OnChangeEvent = MouseEvent<HTMLButtonElement> | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>;
 
 const provinces: Array<string> = [
+  "No vivo en Argentina",
   "Buenos Aires",
   "Catamarca",
   "Chaco",
@@ -22,19 +23,19 @@ const provinces: Array<string> = [
   "Entre Ríos",
   "Formosa",
   "Jujuy",
-  "La Rioja",
   "La Pampa",
+  "La Rioja",
   "Mendoza",
   "Misiones",
   "Neuquén",
   "Río Negro",
   "Salta",
-  "San Luis",
   "San Juan",
+  "San Luis",
   "Santa Cruz",
   "Santa Fe",
   "Santiago del Estero",
-  "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+  "Tierra del Fuego",
   "Tucumán",
 ];
 
