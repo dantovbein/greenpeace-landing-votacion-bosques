@@ -32,6 +32,7 @@
 
 .questionText {
   font-size: 1.25rem;
+  line-height: 120%;
   margin-bottom: 1.5rem;
   text-align: center;
 }
