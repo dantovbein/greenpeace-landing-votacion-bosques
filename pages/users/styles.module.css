@@ -1,0 +1,27 @@
+.main {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  width: 100%;
+  padding: 0;
+}
+
+.item {
+  width: 100%;
+  display: flex;
+}
+
+.item:not(:last-child) {
+  margin-bottom: 0.75rem;
+}
+
+.item span {
+  width: calc(100% / 7);
+  margin-right: 0.5rem;
+}

@@ -1,0 +1,48 @@
+.main {
+  text-align: center;
+  padding: 2rem 0;
+  margin-bottom: 1rem;
+  min-height: 6rem;
+  width: 100%;
+  margin: auto;
+}
+
+.heading {
+  margin-bottom: 10px;
+}
+
+.results {
+  display: flex;
+  flex-direction: row;
+}
+
+.answer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.answer span {
+  width: 2rem;
+  font-weight: bold;
+}
+
+.answerBar {
+  display: flex;
+  background-color: rgb(225, 225, 225);
+  width: 0;
+  transition: width 2s ease;
+  animation-delay: 10s;
+  padding: 0.75rem;
+  border-radius: 6px;
+}
+
+.answer:not(:last-child) {
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 992px) {
+  .main {
+    width: 75%;
+  }
+}

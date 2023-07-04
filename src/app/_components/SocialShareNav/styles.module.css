@@ -1,0 +1,14 @@
+.title {
+  font-size: 1.5rem;
+}
+
+.socialNav {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.icon:not(:last-child) {
+  margin-right: 1rem;
+}

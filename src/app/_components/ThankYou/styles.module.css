@@ -1,0 +1,19 @@
+.main {
+  text-align: center;
+  width: 100%;
+  padding: 1.5rem 0;
+}
+
+.heading {
+  font-size: 2rem;
+}
+
+.highlighted {
+  color: var(--gp-green);
+}
+
+.trees {
+  margin-top: 2rem;
+  width: 400px !important;
+  height: auto !important;
+}

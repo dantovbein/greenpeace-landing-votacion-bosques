@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  coupon:
+    image: greenpeace/votacion-bosques
+    container_name: greenpeace-votacion-bosques
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:80'
+    environment:
+      - PORT=3000
