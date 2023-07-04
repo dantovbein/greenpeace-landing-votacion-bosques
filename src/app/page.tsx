@@ -19,9 +19,11 @@ export default function Home() {
       {fetched ? (
         ((totalVotes || 0) > 1000) && <span className={styles.heading}>{totalVotes} personas ya votaron.</span>
       ) : (
-        <span className={styles.loader}>
-          <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/icons/preloader.svg`} alt="Cargando" width={32} height={32} />
-        </span>
+        <>
+          {/* <span className={styles.loader}>
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/icons/preloader.svg`} alt="Cargando" width={32} height={32} />
+          </span> */}
+        </>
       )}
       <div>
         <QuizForm />
