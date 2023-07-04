@@ -7,7 +7,7 @@ import styles from '@/app/page.module.css'
 import Image from 'next/image';
 
 export default function Home() {
-  const { fetchVotes, quiz: {yesVotes, noVotes, totalVotes}, fetched } = useAppContext();
+  const { fetchVotes, quiz: {totalVotes}, fetched } = useAppContext();
 
   useEffect(() => {
     fetchVotes()
@@ -15,9 +15,10 @@ export default function Home() {
   
   return (
     <section className={styles.main}>
-      {fetched ? (
+
+      {fetched && ((totalVotes || 0) > 1000) ? (
         <>
-          <span className={styles.heading}>{(yesVotes || 0) + (noVotes || 0)} personas ya votaron.</span>
+          <span className={styles.heading}>{totalVotes} personas ya votaron.</span>
         </>
       ) : (
         <span className={styles.loader}>
