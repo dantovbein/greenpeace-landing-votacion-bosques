@@ -23,6 +23,7 @@ export type UserType = {
 export type QuizType = {
   yesVotes?: number;
   noVotes?: number;
+  totalVotes?: number;
 }
 
 export type DataType = {
@@ -113,6 +114,7 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
           ...state.quiz,
           yesVotes: action.payload.yesVotes,
           noVotes: action.payload.noVotes,
+          totalVotes: (action.payload.yesVotes || 0) + (action.payload.noVotes || 0)
         },
       }
     }

@@ -6,15 +6,19 @@ import { useEffect } from 'react';
 import styles from '@/app/page.module.css'
 
 export default function Home() {
-  const { fetchVotes, quiz: {yesVotes, noVotes} } = useAppContext();
-  
+  const { fetchVotes, quiz: {yesVotes, noVotes, totalVotes}, fetched } = useAppContext();
+
   useEffect(() => {
     fetchVotes()
   }, [])
   
   return (
     <section className={styles.main}>
-      {/* <h1 className={styles.heading}>Ya votaron {(yesVotes || 0) + (noVotes || 0)} personas.</h1> */}
+      {fetched ? (
+        <>
+          <h3 className={styles.heading}>{(yesVotes || 0) + (noVotes || 0)} personas ya votaron.</h3>
+        </>
+      ) : <span className={styles.loader}>Cargando datos...</span>}
       <div>
         <QuizForm />
       </div>
