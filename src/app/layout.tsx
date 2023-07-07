@@ -13,7 +13,7 @@ const poppins = Poppins({
 })
 
 export const metadata = {
-  title: 'BASTA DE IMPUNIDAD. ¡VOTÁ POR LOS BOSQUES!',
+  title: '🌲🌳 Consulta Popular: Votá por los bosques, basta de impunidad',
   description: '¿Estás a favor de que se establezcan penas de prisión para los responsables de desmontes ilegales e incendios forestales?',
   
 }

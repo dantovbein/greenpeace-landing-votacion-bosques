@@ -26,7 +26,7 @@ export const Provider: React.FunctionComponent<IProps> = ({ children }) => {
   const [{ user, quiz, submitted, submitting, fetched, fetching, error }, dispatch] = useReducer(reducer, initialState);
 
   const fetchVotes = useCallback(async () => {
-    dispatch({ type: 'FETCH' })
+    dispatch({ type: 'FETCH_VOTES' })
     const formYes = await (await fetch(`${process.env.NEXT_PUBLIC_GP_API}forma/form/${process.env.NEXT_PUBLIC_FORM_ID_YES}`)).json();
     const formNo = await (await fetch(`${process.env.NEXT_PUBLIC_GP_API}forma/form/${process.env.NEXT_PUBLIC_FORM_ID_NO}`)).json();
     
@@ -38,7 +38,7 @@ export const Provider: React.FunctionComponent<IProps> = ({ children }) => {
       }
     })
     
-    dispatch({ type: 'FETCHED' })
+    dispatch({ type: 'FETCHED_VOTES' })
   }, [ dispatch ])
 
   return useMemo(() => (

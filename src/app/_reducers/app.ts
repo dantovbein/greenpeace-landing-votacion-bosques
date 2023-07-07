@@ -8,32 +8,22 @@ export type UserType = {
   lastName: string;
   agePermitted: boolean;
   answer: -1 | 0 | 1;
-  // lastName: string;
-  // birthDate: string;
   email: string;
-  // areaCode: string;
   phoneNumber: string;
-  // birthDate: string;
-  // genre: '' | 'female' | 'male' | 'non-binary';
   docNumber: string;
   province: string;
-  // docType: string;
 }
 
 export type QuizType = {
-  yesVotes?: number;
-  noVotes?: number;
-  totalVotes?: number;
+  yesVotes: number | null;
+  noVotes: number | null;
+  totalVotes?: number | null;
 }
 
 export type DataType = {
   user: UserType;
   quiz: QuizType;
 }
-// export interface IData {
-//   user: IUserData;
-//   payment: IPaymentData;
-// }
 
 export type SharedState = {
   submitted: boolean,
@@ -44,23 +34,15 @@ export type SharedState = {
 };
 
 export type SharedActions = 
-  | { type: 'SUBMIT' }
-  | { type: 'SUBMITTED' }
-  | { type: 'FETCH' }
-  | { type: 'FETCHED' }
+  | { type: 'SUBMIT_FORM' }
+  | { type: 'SUBMITTED_FORM' }
+  | { type: 'FETCH_VOTES' }
+  | { type: 'FETCHED_VOTES' }
+  | { type: 'RESET_VOTES' }
   | { type: 'ERROR', payload: { error: string | null; } }
   | { type: 'FAILURE', error: any }
   | { type: 'UPDATE_FIELD', payload: any }
   | { type: 'UPDATE_QUIZ', payload: QuizType }
-  
-// export type OnChangeEvent = MouseEvent<HTMLButtonElement> | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>;
-// export type OnClickEvent = MouseEvent<HTMLButtonElement>;
-// export type FeedbackType = 'positive' | 'negative';
-
-// export type {
-//   GoogleTagManagerEventType,
-// };
-
 
 export type ContextStateType = {
   user: UserType;
@@ -118,32 +100,42 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
         },
       }
     }
-    case 'SUBMIT': {
+    case 'SUBMIT_FORM': {
       return {
         ...state,
         submitting: true,
         submitted: false,
       }
     }
-    case 'SUBMITTED': {
+    case 'SUBMITTED_FORM': {
       return {
         ...state,
         submitting: false,
         submitted: true,
       }
     }
-    case 'FETCH': {
+    case 'FETCH_VOTES': {
       return {
         ...state,
         fetching: true,
         fetched: false,
       }
     }
-    case 'FETCHED': {
+    case 'FETCHED_VOTES': {
       return {
         ...state,
         fetching: false,
         fetched: true,
+      }
+    }
+    case 'RESET_VOTES': {
+      return {
+        ...state,
+        quiz: {
+          yesVotes: null,
+          noVotes: null,
+          totalVotes: null,
+        }
       }
     }
     case 'FAILURE': {

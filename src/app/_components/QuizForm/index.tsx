@@ -126,7 +126,7 @@ export const Component:FC<{}> = () => {
   const postData = useCallback(async () => {
     if(validate()) {
       if(window.navigator.onLine) {
-        dispatch({ type: 'SUBMIT' });
+        dispatch({ type: 'SUBMIT_FORM' });
     
         const answer = (user.answer === 1) ? 'SI' : 'NO'
   
@@ -159,7 +159,7 @@ export const Component:FC<{}> = () => {
               lastName: user.lastName,
               phoneNumber: user.phoneNumber,
               provincia: user.province,
-              campaignAnswer: answer,
+              campaignName: answer,
               userAgent: window.navigator.userAgent.replace(/;/g, '').replace(/,/g, '')
             }),
           }
@@ -172,7 +172,7 @@ export const Component:FC<{}> = () => {
         }
     
         if(resHubsot.ok && resForma.ok) {
-          dispatch({ type: 'SUBMITTED' });
+          dispatch({ type: 'SUBMITTED_FORM' });
         } else {
           dispatch({
             type: 'FAILURE',

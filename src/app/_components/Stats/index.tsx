@@ -3,9 +3,10 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import styles from '@/app/_components/Stats/styles.module.css';
 import { useAppContext } from "@/app/_contexts/app";
+import Image from "next/image";
 
 const Component: FC<{}> = () => {
-  const { quiz: { noVotes, yesVotes}, fetched, fetching, fetchVotes } = useAppContext();
+  const { quiz: { noVotes, yesVotes}, fetched, fetching, fetchVotes, dispatch } = useAppContext();
   const [ totalVotes, setTotalVotes ] = useState<number>();
 
   useEffect(() => {
@@ -20,16 +21,20 @@ const Component: FC<{}> = () => {
   ]);
 
   useEffect(() => {
+    dispatch({ type: 'RESET_VOTES' })
     fetchVotes();
   }, [])
 
   return useMemo(
     () => (
       <div className={styles.main}>
+        {fetching && !fetched && (
+          <>
+            {/* <span>Cargando encuesta</span> */}
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/icons/preloader.svg`} alt="Cargando" width={32} height={32} />
+          </>
+        )}
         <div className={styles.wrapper}>
-          {!fetching && !fetched && (
-            <span>Cargando encuesta</span>
-          )}
           {!fetching && fetched && (
             <>
               <div className={styles.answer}>
@@ -51,6 +56,8 @@ const Component: FC<{}> = () => {
       totalVotes,
       fetching,
       fetched,
+      fetchVotes,
+      dispatch,
     ]
   )
 }

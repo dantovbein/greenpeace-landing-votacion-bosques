@@ -7,7 +7,7 @@ import styles from '@/app/page.module.css'
 import Image from 'next/image';
 
 export default function Home() {
-  const { fetchVotes, quiz: {totalVotes}, fetched } = useAppContext();
+  const { fetchVotes, quiz: { totalVotes}, fetched } = useAppContext();
 
   useEffect(() => {
     fetchVotes()
@@ -15,14 +15,13 @@ export default function Home() {
   
   return (
     <section className={styles.main}>
-
       {fetched ? (
-        ((totalVotes || 0) > 1000) && <span className={styles.heading}>{totalVotes} personas ya votaron.</span>
+        (totalVotes && totalVotes > 0) && <span className={styles.heading}>{totalVotes} personas ya votaron.</span>
       ) : (
         <>
-          {/* <span className={styles.loader}>
+          <span className={styles.loader}>
             <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/icons/preloader.svg`} alt="Cargando" width={32} height={32} />
-          </span> */}
+          </span>
         </>
       )}
       <div>

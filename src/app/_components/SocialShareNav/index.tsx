@@ -19,8 +19,8 @@ const Component: FunctionComponent<{}> = () => {
       <nav className={styles.socialNav}>
         <WhatsappShareButton
           url={`${process.env.NEXT_PUBLIC_WHATSAPP_URL_SHARE}`}
-          title={`${process.env.NEXT_PUBLIC_WHATSAPP_TITLE_SHARE}`}
-          separator=" "
+          title={`${process.env.NEXT_PUBLIC_TITLE_SHARE}`}
+          separator=""
           windowHeight={SHARE_MODAL_HEIGHT}
           windowWidth={SHARE_MODAL_WIDTH}
           className={styles.icon}
@@ -35,8 +35,8 @@ const Component: FunctionComponent<{}> = () => {
 
         <FacebookShareButton
           hashtag='#votaporlosbosques'
-          title={`${process.env.NEXT_PUBLIC_FACEBOOK_TITLE_SHARE}`}
-          about={`${process.env.NEXT_PUBLIC_FACEBOOK_TITLE_SHARE}`}
+          title={`${process.env.NEXT_PUBLIC_TITLE_SHARE}`}
+          about={`${process.env.NEXT_PUBLIC_TITLE_SHARE}`}
           url={`${process.env.NEXT_PUBLIC_FACEBOOK_URL_SHARE}`}
           windowHeight={SHARE_MODAL_HEIGHT}
           windowWidth={SHARE_MODAL_WIDTH}
@@ -51,7 +51,7 @@ const Component: FunctionComponent<{}> = () => {
         </FacebookShareButton>
 
         <TwitterShareButton
-          title={`${process.env.NEXT_PUBLIC_TWITTER_TITLE_SHARE}`}
+          title={`${process.env.NEXT_PUBLIC_TITLE_SHARE}`}
           hashtags={['votaporlosbosques']}
           via='GreenpeaceArg'
           url={`${process.env.NEXT_PUBLIC_TWITTER_URL_SHARE}`}
@@ -69,8 +69,7 @@ const Component: FunctionComponent<{}> = () => {
         </TwitterShareButton>
         
         <LinkedinShareButton
-          title={`${process.env.NEXT_PUBLIC_LINKEDIN_TITLE}`}
-          summary={`${process.env.NEXT_PUBLIC_LINKEDIN_SUMMARY}`}
+          title={`${process.env.NEXT_PUBLIC_TITLE_SHARE}`}
           source={`${process.env.NEXT_PUBLIC_LINKEDIN_SOURCE}`}
           url={`${process.env.NEXT_PUBLIC_LINKEDIN_URL_SHARE}`}
           className={styles.icon}
