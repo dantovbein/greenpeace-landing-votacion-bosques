@@ -127,7 +127,14 @@ export const Component:FC<{}> = () => {
     if(validate()) {
       if(window.navigator.onLine) {
         dispatch({ type: 'SUBMIT_FORM' });
-    
+
+        // Check if the user has already voted
+        const userResponse = await (await fetch(`${process.env.NEXT_PUBLIC_GP_API}hubspot/contact/email/${user.email}`)).json();
+        if(userResponse && userResponse.votacion_campana_bosques) {
+          dispatch({ type: 'FAILURE', error: 'No se pueden emitir mas de un voto.'})
+          return;
+        }
+
         const answer = (user.answer === 1) ? 'SI' : 'NO'
   
         const resHubsot = await fetch(

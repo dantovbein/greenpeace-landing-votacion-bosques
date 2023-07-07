@@ -141,7 +141,7 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
     case 'FAILURE': {
       return {
         ...state,
-        submitting: true,
+        submitting: false,
         submitted: false,
         error: action.error,
       }
