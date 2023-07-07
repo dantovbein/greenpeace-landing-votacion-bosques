@@ -13,8 +13,8 @@ const poppins = Poppins({
 })
 
 export const metadata = {
-  title: '🌲🌳 Consulta Popular: Votá por los bosques, basta de impunidad',
-  description: '¿Estás a favor de que se establezcan penas de prisión para los responsables de desmontes ilegales e incendios forestales?',
+  title: `${process.env.NEXT_PUBLIC_META_TITLE}`,
+  description: `${process.env.NEXT_PUBLIC_META_DESCRIPTION}`,
   
 }
 
@@ -28,16 +28,18 @@ export default function RootLayout({
       <head>
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://votaporlosbosques.org" />
-        <meta property="og:title" content="Votá por los Bosques" />
-        <meta property="og:description" content="Yo ya voté por los bosques en la Consulta Popular ¡Votá vos también!" />
-        <meta property="og:image" content="https://XXXX" />
-        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="og:title" content={`${process.env.NEXT_PUBLIC_META_TITLE}`} />
+        <meta property="og:description" content={`${process.env.NEXT_PUBLIC_META_DESCRIPTION}`} />
+        <meta property="og:image" content="https://votaporlosbosques.org/images/gp-bosques-header.jpg" />
+        <meta property="twitter:card" content={`${process.env.NEXT_PUBLIC_META_DESCRIPTION}`} />
         <meta property="twitter:url" content=" https://votaporlosbosques.org" />
-        <meta property="twitter:title" content=" Votá por los Bosques" />
-        <meta property="twitter:description" content="Yo ya voté por los bosques en la Consulta Popular ¡Votá vos también!" />
+        <meta property="twitter:title" content={`${process.env.NEXT_PUBLIC_META_TITLE}`} />
+        <meta property="twitter:description" content={`${process.env.NEXT_PUBLIC_META_DESCRIPTION}`} />
         <meta property="twitter:image" content='https://votaporlosbosques.org/images/gp-bosques-header.jpg' />
         <meta property="twitter:image" content='https://votaporlosbosques.org/images/gp-bosques-header.jpg' />
         <Script src="https://www.googletagmanager.com/gtag/js?id=GTM-TZB6GQ3" />
+      </head>
+      <body className={poppins.className}>
         <Script id="google-analytics">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -46,8 +48,6 @@ export default function RootLayout({
             gtag('config', 'GTM-TZB6GQ3');
           `}
         </Script>
-      </head>
-      <body className={poppins.className}>
         <Header />
         <main className={styles.main}>
           <Provider>
