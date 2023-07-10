@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  coupon:
+  greenpeace-votacion-bosques:
     image: greenpeace/votacion-bosques
     container_name: greenpeace-votacion-bosques
     build:
