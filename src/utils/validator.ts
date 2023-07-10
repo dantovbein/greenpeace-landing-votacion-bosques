@@ -147,7 +147,7 @@ export const validatePhoneNumber = (value = '', minLength = 8): ValidationType =
   };
 }
 
-export const validateCitizenId = (value: string, minLength = 8): ValidationType => {
+export const validateCitizenId = (value: string, minLength = 7): ValidationType => {
   if(value === '') {
     return {
       isValid: false,
