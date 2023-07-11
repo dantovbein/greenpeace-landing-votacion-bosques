@@ -30,7 +30,6 @@ const Component: FC<{}> = () => {
       <div className={styles.main}>
         {fetching && !fetched && (
           <>
-            {/* <span>Cargando encuesta</span> */}
             <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/icons/preloader.svg`} alt="Cargando" width={32} height={32} />
           </>
         )}
