@@ -8,7 +8,7 @@ build:
 
 .PHONY: reset
 reset:
-	docker-compose -f docker-compose.yml up
+	docker-compose -f docker-compose.yml up -d
 
 .PHONY: down
 down:
