@@ -7,6 +7,7 @@ WORKDIR /app
 # If you want to install the project
 COPY . .
 
+RUN npm install
 RUN npm run build
 
 # nginx state for serving content
