@@ -1,10 +1,14 @@
-.PHONY: start
-start:
+.PHONY: run
+run:
 	make pull && make build
 
 .PHONY: build
 build:
-	make pull && docker-compose -f docker-compose.yml up -d --build --remove-orphans
+	docker-compose -f docker-compose.yml up -d --build --remove-orphans
+
+.PHONY: reset
+reset:
+	docker-compose -f docker-compose.yml up
 
 .PHONY: down
 down:
