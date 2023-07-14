@@ -1,0 +1,9 @@
+* * * * * sh ./results.sh
+* * * * * sh /results.sh
+* * * * * sh results.sh
+* * * * * * root /app/results.sh
+* * * * * root /app/results.sh
+* * * * * root /app/results.sh
+* * * * * sh /app/results.sh
+* * * * * sh /usr/share/nginx/html/app/results.sh
+* * * * * root /usr/share/nginx/html/app/results.sh
