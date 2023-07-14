@@ -21,8 +21,8 @@ COPY --from=builder /app/out .
 COPY --from=builder /app/bin/results.sh .
 RUN chmod 0644 ./results.sh
 #Install Cron
-RUN apt-get update
-RUN apt-get -y install cron
+# RUN apt-get update
+# RUN apt-get -y install cron
 # Add the cron job
 RUN crontab -l | { cat; echo "* * * * * bash ./results.sh"; } | crontab -
 
