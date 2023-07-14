@@ -20,8 +20,8 @@ COPY --from=builder /app/out .
 
 
 # RUN apt-get update && apt-get -y install cron
-COPY results-cron /etc/cron.d/results-cron
-RUN chmod 0644 /etc/cron.d/results-cron
+COPY results-cron /etc/crontabs/results-cron
+RUN chmod 0644 /etc/crontabs/results-cron
 RUN touch /var/log/cron.log
 
 COPY --from=builder /app/bin/results.sh .
