@@ -19,7 +19,7 @@ WORKDIR /usr/share/nginx/html/app
 COPY --from=builder /app/out .
 
 
-RUN apt-get update && apt-get -y install cron
+# RUN apt-get update && apt-get -y install cron
 COPY results-cron /etc/cron.d/results-cron
 RUN chmod 0644 /etc/cron.d/results-cron
 RUN touch /var/log/cron.log
