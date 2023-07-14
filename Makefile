@@ -8,7 +8,7 @@ build:
 
 .PHONY: up
 up:
-	docker-compose -f docker-compose.yml upgit a
+	docker-compose -f docker-compose.yml up
 
 .PHONY: reset
 reset:
