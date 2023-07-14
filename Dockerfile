@@ -19,7 +19,7 @@ WORKDIR /usr/share/nginx/html/app
 COPY --from=builder /app/out .
 
 COPY --from=builder /app/bin/results.sh .
-RUN chmod 0644 /app/bin/results.sh
+RUN chmod 0644 ./results.sh
 #Install Cron
 RUN apt-get update
 RUN apt-get -y install cron
