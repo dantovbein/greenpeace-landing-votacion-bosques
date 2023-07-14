@@ -24,7 +24,7 @@ RUN chmod 0644 ./results.sh
 # RUN apt-get update
 # RUN apt-get -y install cron
 # Add the cron job
-RUN crontab -l | { cat; echo "* * * * * bash ./results.sh"; } | crontab -
+RUN crontab -l | { cat; echo "* * * * * bash /usr/share/nginx/html/app/results.sh"; } | crontab -
 RUN apk add jq
 
 RUN rm -rf /etc/nginx/conf.d/default.conf
