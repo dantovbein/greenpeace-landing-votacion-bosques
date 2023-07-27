@@ -167,7 +167,8 @@ export const Component:FC<{}> = () => {
               phoneNumber: user.phoneNumber,
               provincia: user.province,
               campaignName: answer,
-              userAgent: window.navigator.userAgent.replace(/;/g, '').replace(/,/g, '')
+              userAgent: window.navigator.userAgent.replace(/;/g, '').replace(/,/g, ''),
+              fromUrl: window.location.search || '?',
             }),
           }
         );
