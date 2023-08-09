@@ -356,6 +356,7 @@ export const Component:FC<{}> = () => {
               </label>
             </div>
           </div>
+          <p className={styles.faqText}>Al firmar, aceptás nuestra política de privacidad. Recibirás información sobre nuestras campañas y formas de participar. Podrás desuscribirte cuando quieras.</p>
         </div>
         <nav className={styles.nav}>
           <button

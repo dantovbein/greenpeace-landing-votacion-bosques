@@ -206,6 +206,12 @@
   color: rgb(177, 0, 0);
 }
 
+.faqText {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
 @media (min-width: 768px) {
   .answerNav {
     width: 300px;
