@@ -33,7 +33,7 @@ export const Provider: React.FunctionComponent<IProps> = ({ children }) => {
     dispatch({
       type: 'UPDATE_QUIZ',
       payload: {
-        yesVotes: 69121 + (formYes.total || 0),
+        yesVotes: 68722 + (formYes.total || 0),
         noVotes: 13 + (formNo.total || 0),
       }
     })

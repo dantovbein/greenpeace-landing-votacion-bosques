@@ -9,6 +9,20 @@ const Component: FC<{}> = () => {
   const { quiz: { noVotes, yesVotes}, fetched, fetching, fetchVotes, dispatch } = useAppContext();
   const [ totalVotes, setTotalVotes ] = useState<number>();
 
+  const calculatePercentage = (value: number) => {
+    const percentage = Math.round(value * 100 / totalVotes!);
+
+    if(percentage === 0) {
+      return 1;
+    }
+    
+    if(percentage === 100) {
+      return 99;
+    }
+
+    return percentage;
+  };
+
   useEffect(() => {
     if(typeof yesVotes === 'number' && typeof noVotes === 'number') {
       setTotalVotes(yesVotes + noVotes);
@@ -38,11 +52,11 @@ const Component: FC<{}> = () => {
             <>
               <div className={styles.answer}>
                 <span>SI</span>
-                <div className={`${styles.answerBar}`} style={{ width: `${yesVotes! * 100 / totalVotes!}%`}}>{Math.round(yesVotes! * 100 / totalVotes!)}%</div>
+                <div className={`${styles.answerBar}`} style={{ width: `${yesVotes! * 100 / totalVotes!}%`}}>{calculatePercentage(yesVotes || 0)}%</div>
               </div>
               <div className={styles.answer}>
                 <span>NO</span>
-                <div className={`${styles.answerBar}`} style={{ width: `${noVotes! * 100 / totalVotes!}%`}}>{Math.round(noVotes! * 100 / totalVotes!)}%</div>
+                <div className={`${styles.answerBar}`} style={{ width: `${noVotes! * 100 / totalVotes!}%`}}>{calculatePercentage(noVotes || 0)}%</div>
               </div>
               <span>Sobre un total de <strong>{totalVotes}</strong> votos.</span>
             </>
