@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "rm -rf ./out && next build",
+    "dev": "cp ./.env.local.sample ./.env.local && next dev",
+    "build": "cp ./.env.production.sample ./.env.production && rm -rf ./out && next build",
     "start": "next start",
     "lint": "next lint",
     "types": "ln -s $(pwd)/types $(pwd)/node_modules/@types/greenpeace"

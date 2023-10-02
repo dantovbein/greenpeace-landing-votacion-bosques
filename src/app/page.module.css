@@ -1,3 +1,7 @@
+.main {
+  padding-top: 30px;
+}
+
 .heading {
   display: block;
   text-align: center;
@@ -11,4 +15,33 @@
   width: 100%;
   text-align: center;
   min-height: 2.5rem;
+}
+
+.logo {
+  margin: auto;
+  width: 250px;
+  height: 250px;
+  background-repeat: no-repeat;
+}
+
+p strong.highlighted {
+  background-color: #c7ffbc;
+}
+
+.main p {
+  font-size: 1.1rem;
+  line-height: 175%;
+  margin-bottom: 1.1rem;
+  text-align: center;
+}
+
+@media (min-width: 992px) {
+  .main p {
+    font-size: 1.5rem;
+  }
+
+  .logo {
+    width: 300px;
+    height: 300px;
+  }
 }

@@ -15,6 +15,7 @@
 .item {
   width: 100%;
   display: flex;
+  justify-content: space-around;
 }
 
 .item:not(:last-child) {

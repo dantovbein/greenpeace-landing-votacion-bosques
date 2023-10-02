@@ -33,8 +33,8 @@ export const Provider: React.FunctionComponent<IProps> = ({ children }) => {
     dispatch({
       type: 'UPDATE_QUIZ',
       payload: {
-        yesVotes: 68722 + 155631 + (formYes.total || 0),
-        noVotes: 13 + (formNo.total || 0),
+        yesVotes: 68722 + 155631 + 2475 + (formYes.total || 0), // 229466 records 226991 personas ya votaron
+        noVotes: 13 + 466 +(formNo.total || 0),
       }
     })
     

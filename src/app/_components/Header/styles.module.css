@@ -1,6 +1,7 @@
 .main {
   width: 100vw;
   text-align: center;
+  position: relative;
 }
 
 .topBar {
@@ -8,6 +9,10 @@
   width: 100%;
   padding: 1rem;
   background: var(--gp-green);
+}
+
+.topBar h4 {
+  font-size: 1.2rem;
 }
 
 .picture {
@@ -22,13 +27,30 @@
   color: var(--white);
 }
 
+.headerText {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.headerText p {
+  display: inline-block;
+  color: white;
+  font-size: 1.25rem;
+  background-color: black;
+  display: inline;
+}
+
 .heading {
   line-height: 120%;
   text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
+  font-size: 4rem;
 }
 
 .highlighted {
-  color: var(--gp-green);
+  color: #ffe100;
 }
 
 .url {
@@ -38,7 +60,40 @@
   letter-spacing: 2px;
 }
 
+.slider {
+  position: relative;
+  height: 400px;
+}
+
+.sliderWrapper {
+  display: flex;
+  position: absolute;
+  height: 100%;
+  transition: all .5s ease;
+}
+
+.sliderItem {
+  flex: 1;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 @media (min-width: 992px) {
+  .slider {
+    height: 600px;
+  }
+
+  .headerText {
+    bottom: 80px;
+  }
+
+  .headerText p {
+    font-size: 1.75rem;
+    padding: 0 10px;
+  }
+
   .picture {
     min-height: 20rem;
     font-size: 2rem;
@@ -49,5 +104,9 @@
   .url {
     color: var(--white);
     font-size: 1.25rem;
+  }
+
+  .heading {
+    font-size: 5rem;
   }
 }

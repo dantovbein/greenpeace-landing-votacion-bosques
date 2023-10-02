@@ -8,6 +8,7 @@ import Image from "next/image";
 const Component: FC<{}> = () => {
   const { quiz: { noVotes, yesVotes}, fetched, fetching, fetchVotes, dispatch } = useAppContext();
   const [ totalVotes, setTotalVotes ] = useState<number>();
+  const [yesVotesCounter, setYesVotesCounter] = useState<number>(0);
 
   const calculatePercentage = (value: number) => {
     const percentage = Math.round(value * 100 / totalVotes!);
@@ -34,11 +35,6 @@ const Component: FC<{}> = () => {
     fetched,
   ]);
 
-  useEffect(() => {
-    dispatch({ type: 'RESET_VOTES' })
-    fetchVotes();
-  }, [])
-
   return useMemo(
     () => (
       <div className={styles.main}>
@@ -48,17 +44,24 @@ const Component: FC<{}> = () => {
           </>
         )}
         <div className={styles.wrapper}>
+          
           {!fetching && fetched && (
             <>
-              <div className={styles.answer}>
-                <span>SI</span>
-                <div className={`${styles.answerBar}`} style={{ width: `${yesVotes! * 100 / totalVotes!}%`}}>{calculatePercentage(yesVotes || 0)}%</div>
+              <span>Sobre un total de <strong>{totalVotes}</strong> personas</span>
+              <div className={styles.results}>
+                <div className={styles.answerCounter}>
+                  <h1>{yesVotes}</h1>
+                  <span>votaron <strong>SI</strong></span>
+                </div>
+                <div className={styles.answerCounter}>
+                  <h1>{noVotes}</h1>
+                  <span>votaron <strong>NO</strong></span>
+                </div>
               </div>
-              <div className={styles.answer}>
-                <span>NO</span>
+              <div className={styles.bar}>
+                <div className={`${styles.answerBar}`} style={{ width: `${yesVotes! * 100 / totalVotes!}%`}}>{calculatePercentage(yesVotes || 0)}%</div>
                 <div className={`${styles.answerBar}`} style={{ width: `${noVotes! * 100 / totalVotes!}%`}}>{calculatePercentage(noVotes || 0)}%</div>
               </div>
-              <span>Sobre un total de <strong>{totalVotes}</strong> votos.</span>
             </>
           )}
         </div>
@@ -69,6 +72,7 @@ const Component: FC<{}> = () => {
       totalVotes,
       fetching,
       fetched,
+      yesVotesCounter,
       fetchVotes,
       dispatch,
     ]

@@ -6,8 +6,6 @@ export type UserType = {
   id?: number,
   firstName: string;
   lastName: string;
-  agePermitted: boolean;
-  answer: -1 | 0 | 1;
   email: string;
   phoneNumber: string;
   docNumber: string;
@@ -59,7 +57,6 @@ export const initialState: ContextStateType = {
     phoneNumber: '',
     email: '',
     province: '',
-    answer: -1,
     agePermitted: false,
     ...((process.env.NEXT_PUBLIC_FILL_FORM === 'true') ? {
       firstName: 'Doe',
