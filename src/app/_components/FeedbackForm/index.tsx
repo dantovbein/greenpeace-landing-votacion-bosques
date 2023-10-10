@@ -2,47 +2,14 @@
 
 import React, { ChangeEvent, FC, MouseEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from '@/app/_components/QuizForm/styles.module.css'
+import styles from '@/app/_components/FeedbackForm/styles.module.css'
 import { useAppContext } from "@/app/_contexts/app";
-import { UserType } from '@/app/_reducers/app';
+import { headers, provinces } from '@/utils/data';
 import { validateCitizenId, validateEmail, validateEmptyField, validateFirstName, validateLastName, validatePhoneNumber } from '@/utils/validator';
 
 declare const window: Window & { dataLayer: Record<string, unknown>[]; };
 
 export type OnChangeEvent = MouseEvent<HTMLButtonElement> | ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>;
-
-const provinces: Array<string> = [
-  "No vivo en Argentina",
-  "Buenos Aires",
-  "Catamarca",
-  "Chaco",
-  "Chubut",
-  "Ciudad Autónoma de Buenos Aires",
-  "Córdoba",
-  "Corrientes",
-  "Entre Ríos",
-  "Formosa",
-  "Jujuy",
-  "La Pampa",
-  "La Rioja",
-  "Mendoza",
-  "Misiones",
-  "Neuquén",
-  "Río Negro",
-  "Salta",
-  "San Juan",
-  "San Luis",
-  "Santa Cruz",
-  "Santa Fe",
-  "Santiago del Estero",
-  "Tierra del Fuego",
-  "Tucumán",
-];
-
-const headers = {
-  "Content-Type": "application/json",
-  "X-Greenlab-App": 'formulario-votacion-bosques'
-};
 
 export const Component:FC<{}> = () => {
   const { user, submitted, submitting, error, dispatch } = useAppContext();
@@ -127,15 +94,6 @@ export const Component:FC<{}> = () => {
     if(validate()) {
       if(window.navigator.onLine) {
         dispatch({ type: 'SUBMIT_FORM' });
-
-        // Check if the user has already voted
-        const userResponse = await (await fetch(`${process.env.NEXT_PUBLIC_GP_API}hubspot/contact/email/${user.email}`)).json();
-        if(userResponse && userResponse.votacion_campana_bosques) {
-          dispatch({ type: 'FAILURE', error: 'No se pueden emitir mas de un voto.'})
-          return;
-        }
-
-        const answer = (user.answer === 1) ? 'SI' : 'NO'
   
         const resHubsot = await fetch(
           `${process.env.NEXT_PUBLIC_GP_API}hubspot/contact`,
@@ -149,77 +107,49 @@ export const Component:FC<{}> = () => {
               phone: user.phoneNumber,
               lugar_de_residencia: user.province,
               dni__c: user.docNumber,
-              Votacion_campana_bosques: user.answer === -1 ? '' : answer,
             }),
           }
         );
-    
-        const resForma = await fetch(
-          `${process.env.NEXT_PUBLIC_GP_API}forma/form/${user.answer ? process.env.NEXT_PUBLIC_FORM_ID_YES : process.env.NEXT_PUBLIC_FORM_ID_NO}/record`,
-          {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({
-              citizenId: user.docNumber,
-              email: user.email,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              phoneNumber: user.phoneNumber,
-              provincia: user.province,
-              campaignName: answer,
-              userAgent: window.navigator.userAgent.replace(/;/g, '').replace(/,/g, ''),
-              fromUrl: window.location.search || '?',
-            }),
-          }
-        );
-  
+
         if(resHubsot.ok) {
           window.dataLayer.push({
             event: "formSubmission",
-          })
-        }
-    
-        if(resHubsot.ok && resForma.ok) {
-          dispatch({ type: 'SUBMITTED_FORM' });
+          });
+
+          const resForma = await fetch(
+            `${process.env.NEXT_PUBLIC_GP_API}forma/form/${process.env.NEXT_PUBLIC_CONTACT_FORM_ID}/record`,
+            {
+              method: 'POST',
+              headers,
+              body: JSON.stringify({
+                citizenId: user.docNumber,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phoneNumber: user.phoneNumber,
+                provincia: user.province,
+                userAgent: window.navigator.userAgent.replace(/;/g, '').replace(/,/g, ''),
+                fromUrl: window.location.search || '?',
+              }),
+            }
+          );
+
+          if(resForma.ok) {
+            dispatch({ type: 'SUBMITTED_FORM' });
+          } else {
+            dispatch({
+              type: 'FAILURE',
+              error: 'Hubo un error inesperado. Volvé a intentar en unos segundos.'
+            })
+          }
+
         } else {
           dispatch({
             type: 'FAILURE',
-            error: 'Hubo un error inesperado. Volvé a intentar en unos segundos.'
-          })
-        }
-      } else {
-        // Only when the connection is down
-        const offlineUsers = window.localStorage.getItem('users')
-        if(offlineUsers) {
-          const users = (JSON.parse(offlineUsers) as Array<any>)
-          users.push({
-            id: new Date().getTime(),
-            docNumber: user.docNumber,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            phoneNumber: user.phoneNumber,
-            province: user.province,
-            answer: user.answer,
-          } as UserType)
-          // Update offline users
-          window.localStorage.setItem('users', JSON.stringify(users))
-        } else {
-          // Create offline users
-          window.localStorage.setItem('users', JSON.stringify([
-            {
-              id: new Date().getTime(),
-              docNumber: user.docNumber,
-              email: user.email,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              phoneNumber: user.phoneNumber,
-              province: user.province,
-              answer: user.answer,
-            } as UserType
-          ]))
-        }
-      }
+            error: 'Hemos detectado un error en el email.',
+          });
+        }    
+      } 
     } else {
       console.log('Formulario inválido')
     }
@@ -227,20 +157,6 @@ export const Component:FC<{}> = () => {
     user,
     dispatch,
   ]);
-
-  const onChangeCheckbox = useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch({
-        type: 'UPDATE_FIELD',
-        payload: {
-          [`${evt.currentTarget.name}`]: !user.agePermitted,
-        },
-      })
-    },
-  [
-    user,
-    dispatch,
-  ])
 
   const onSubmit = useCallback(
     async (evt: React.FormEvent) => {
@@ -259,31 +175,10 @@ export const Component:FC<{}> = () => {
     router,
   ])
 
-  useEffect(() => {
-    if(user.answer !== -1 && userRef.current) {
-      const elementRect = userRef.current.getBoundingClientRect();
-      
-      window.scrollTo({
-        top: elementRect.top - 100,
-        left: 0,
-        behavior: "smooth",
-      });
-    }
-  }, [ user.answer ])
-
   return useMemo(() => (
     <>
       <form className={styles.main} onSubmit={onSubmit}>
-        <div className={styles.question}>
-          <h3 className={styles.questionText}>¿Estás a favor de que se establezcan penas de prisión para los responsables de desmontes ilegales e incendios forestales?</h3>
-          <div className={styles.column}>
-            <nav className={styles.answerNav}>
-              <button onClick={onClickQuestion} className={`${styles.answerBtn} ${user.answer === 1 ? styles.answerSelected : ''}`} data-value={1}>SI</button>
-              <button onClick={onClickQuestion} className={`${styles.answerBtn} ${user.answer === 0 ? styles.answerSelected : ''}`} data-value={0}>NO</button>
-            </nav>
-          </div>
-        </div>
-        <h2 className={styles.subHeading}>Completá tus datos</h2>
+        <h2 className={styles.subHeading}>Si querés sumar tu apoyo a la campaña y recibir información, completá el siguiente formulario:</h2>
         <div ref={userRef} className={styles.userSection}>
           <div className={styles.row}>
             <div className={styles.column}>
@@ -348,23 +243,14 @@ export const Component:FC<{}> = () => {
               </label>
             </div>
           </div>
-          <div className={styles.row}>
-            <div className={`${styles.column}`}>
-              <label htmlFor='agePermitted' className={styles.checkbox}>
-                <span><strong>Soy mayor de 16 años</strong></span>
-                <input type="checkbox" name='agePermitted' onChange={onChangeCheckbox} />
-              </label>
-            </div>
-          </div>
-          <p className={styles.faqText}>Al firmar, aceptás nuestra política de privacidad. Recibirás información sobre nuestras campañas y formas de participar. Podrás desuscribirte cuando quieras.</p>
         </div>
         <nav className={styles.nav}>
           <button
             className={styles.submitBtn}
             type='submit'
-            disabled={(submitting || submitted || !user.agePermitted || user.answer === -1)}
+            disabled={(submitting || submitted)}
           >
-            {submitting ? 'ENVIANDO VOTO ...' :'VOTAR'}
+            {submitting ? 'ENVIANDO ...' :'ENVIAR'}
           </button>
         </nav>
         {(error) && <span className={styles.error}>{error}</span>}
@@ -378,12 +264,11 @@ export const Component:FC<{}> = () => {
     userRef,
     validate,
     onChange,
-    onChangeCheckbox,
     onChangeQuestion,
     onClickQuestion,
     onSubmit,
   ]);
 }
 
-Component.displayName = 'QuizForm'
+Component.displayName = 'FeedbackForm'
 export default Component

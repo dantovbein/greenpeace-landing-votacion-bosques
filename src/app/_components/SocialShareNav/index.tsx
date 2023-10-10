@@ -15,7 +15,7 @@ const SHARE_MODAL_WIDTH = 700;
 const Component: FunctionComponent<{}> = () => {
   return (
     <div>
-      <h4 className={styles.title}>Compartí con tus amigos para que voten por los bosques</h4>
+      <h4 className={styles.title}>Compartí para sumar tu apoyo a la protección de nuestros bosques</h4>
       <nav className={styles.socialNav}>
         <WhatsappShareButton
           url={`${process.env.NEXT_PUBLIC_WHATSAPP_URL_SHARE}`}

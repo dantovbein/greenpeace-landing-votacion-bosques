@@ -30,23 +30,22 @@ export default function Users() {
       <ul className={styles.list}>
         <li className={styles.item}>
           <span>Email</span>
-          <span>Nombre</span>
-          <span>Apellido</span>
+          <span>Nombre completo</span>
           <span>DNI</span>
           <span>Teléfono</span>
           <span>Provincia</span>
           <span>Voto</span>
+          <span>Fecha</span>
         </li>
         {users.map((user: any, key: number) => (
           <li key={key} className={styles.item}>
-            <span>{user.createdAt}</span>
+            <span>{user.firstName} {user.lastName}</span>
             <span>{user.email}</span>
-            <span>{user.firstName}</span>
-            <span>{user.lastName}</span>
             <span>{user.docNumber}</span>
             <span>{user.phoneNumber}</span>
             <span>{user.city}</span>
             <span>{user.answer ? 'Si' : 'No'}</span>
+            <span>{user.createdAt}</span>
          </li>
         ))}
       </ul>
