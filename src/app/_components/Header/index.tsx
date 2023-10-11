@@ -58,7 +58,7 @@ export default function Header() {
       </div>
       <div className={styles.headerText}>
         <h1 className={styles.heading}><span className={styles.highlighted}>¡{(yesVotes && noVotes ? yesVotes + noVotes : "")!} PERSONAS VOTARON!</span></h1>
-        <p>Los resultados serán entregados al congreso de la Nación</p>
+        <p>Los resultados serán entregados al Congreso de la Nación</p>
       </div>
     </header>
   ), [
