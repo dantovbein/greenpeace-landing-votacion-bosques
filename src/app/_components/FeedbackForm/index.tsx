@@ -178,7 +178,7 @@ export const Component:FC<{}> = () => {
   return useMemo(() => (
     <>
       <form className={styles.main} onSubmit={onSubmit}>
-        <h2 className={styles.subHeading}>Si querés sumar tu apoyo a la campaña y recibir información, completá el siguiente formulario:</h2>
+        <h2 className={styles.subHeading}>Si querés sumarte a este movimiento en defensa de los bosques, completá el siguiente formulario:</h2>
         <div ref={userRef} className={styles.userSection}>
           <div className={styles.row}>
             <div className={styles.column}>

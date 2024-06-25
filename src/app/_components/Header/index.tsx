@@ -4,10 +4,10 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '@/app/_components/Header/styles.module.css'
 import { useAppContext } from '@/app/_contexts/app';
 
-const pictures: Array<string> = [
-  `${process.env.NEXT_PUBLIC_BASE_PATH}/images/banner/banner1.jpg`,
-  `${process.env.NEXT_PUBLIC_BASE_PATH}/images/banner/banner2.jpg`,
-  `${process.env.NEXT_PUBLIC_BASE_PATH}/images/banner/banner3.jpg`,
+type PictureType = {path: string; credits: string;};
+const pictures: Array<PictureType> = [
+  {path: `${process.env.NEXT_PUBLIC_BASE_PATH}/images/banner/BannerChaco-clean.jpg`, credits: 'M.Katz / Greenpeace'},
+  {path: `${process.env.NEXT_PUBLIC_BASE_PATH}/images/banner/BannerLos-Alerces-clean.jpg`, credits: 'Maxi Jonás / Greenpeace'}
 ];
 
 export default function Header() {
@@ -33,7 +33,7 @@ export default function Header() {
   return useMemo(() => (
     <header className={styles.main}>
       <div className={styles.topBar}>
-        <h4>CONSULTA POPULAR FINALIZADA</h4>
+        <h4>RESULTADOS DE LA CONSULTA POPULAR</h4>
       </div>
 
       <div className={styles.slider}>
@@ -46,13 +46,16 @@ export default function Header() {
               transform: `translateX(-${windowInnerWidth*currentSlide}px)`,
             }
           }>
-          {pictures.map((picture: string, index: number) => (
+          {pictures.map((picture: PictureType, index: number) => (
             <div 
               key={index}
               className={styles.sliderItem} 
               style={{
-                backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(${picture})`}}
-            />
+                backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(${picture.path})`,
+              }}
+            >
+              <span className={styles.credits}>{picture.credits}</span>
+            </div>
           ))}
         </div>
       </div>
