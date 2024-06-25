@@ -33,7 +33,7 @@ export default function Header() {
   return useMemo(() => (
     <header className={styles.main}>
       <div className={styles.topBar}>
-        <h4>RESULTADOS DE LA CONSULTA POPULAR</h4>
+        <h4>DESTRUIR BOSQUES ES UN CRIMEN</h4>
       </div>
 
       <div className={styles.slider}>
@@ -61,7 +61,7 @@ export default function Header() {
       </div>
       <div className={styles.headerText}>
         <h1 className={styles.heading}><span className={styles.highlighted}>¡{(yesVotes && noVotes ? yesVotes + noVotes : "")!} PERSONAS VOTARON!</span></h1>
-        <p>Los resultados serán entregados al Congreso de la Nación</p>
+        <p>Sumate al reclamo contra la impunidad</p>
       </div>
     </header>
   ), [
